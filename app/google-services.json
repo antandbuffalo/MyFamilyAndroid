@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "306771409478",
+    "firebase_url": "https://myfamily-b577f.firebaseio.com",
+    "project_id": "myfamily-b577f",
+    "storage_bucket": "myfamily-b577f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306771409478:android:efd72abfd866c506",
+        "android_client_info": {
+          "package_name": "com.antandbuffalo.myfamily"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306771409478-5b9o5s7d4j3pddofbseqh0o15ap30a74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.antandbuffalo.myfamily",
+            "certificate_hash": "3eaaab0fe39cb122db2c92e9414151e356e02237"
+          }
+        },
+        {
+          "client_id": "306771409478-um5s5ma0a2u26fscsm9b9s24nmdokrjb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY5isq23du9ZmySqk-f_tho1XBw6QbNxc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306771409478-um5s5ma0a2u26fscsm9b9s24nmdokrjb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
