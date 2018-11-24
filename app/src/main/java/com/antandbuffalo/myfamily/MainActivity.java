@@ -1,5 +1,7 @@
 package com.antandbuffalo.myfamily;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,11 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-
+    MainViewModel mainViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,8 +50,34 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         //loadListView();
-        setupFirebase();
+        //setupFirebase();
+        populateList();
     }
+
+    public void populateList() {
+        final ListView listview = (ListView) findViewById(R.id.listview);
+
+        ArrayList<String> list = mainViewModel.getMenu();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("index", "i - " + i);
+                switch (i) {
+                    case 0: {
+                        Intent intent = new Intent(getApplicationContext(), Members.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

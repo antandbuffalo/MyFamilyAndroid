@@ -15,9 +15,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MemberDetails extends AppCompatActivity {
-    ArrayList members;
+    List<Member> members;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,15 +27,15 @@ public class MemberDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        Integer index  = intent.getIntExtra("index", 0);
+        Member member = (Member) intent.getSerializableExtra("member");
         //String index = intent.getStringExtra("index");
-        Log.d("index - ", index + "");
+        Log.d("index - ", member + "");
 
         FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
         members = firebaseDataService.getMembers();
 
         //HashMap<String, String> member = firebaseDataService.getMember(index);
-        HashMap<String, String> member = (HashMap<String, String>) members.get(index);
+        //HashMap<String, String> member = (HashMap<String, String>) members.get(index);
 
         EditText name = (EditText)findViewById(R.id.name);
         EditText date = (EditText)findViewById(R.id.date);
@@ -42,12 +43,12 @@ public class MemberDetails extends AppCompatActivity {
         EditText year = (EditText)findViewById(R.id.year);
         EditText nickName = (EditText)findViewById(R.id.nickName);
 
-        name.setText((String)member.get("name"));
-        nickName.setText(member.get("nickName"));
+        name.setText(member.name);
+        nickName.setText(member.nickName);
 
-        date.setText(getDate(member.get("dob")));
-        month.setText(getMonth(member.get("dob")));
-        year.setText(getYear(member.get("dob")));
+        date.setText(getDate(member.dob));
+        month.setText(getMonth(member.dob));
+        year.setText(getYear(member.dob));
 
         Button save = findViewById(R.id.saveButton);
         save.setOnClickListener(new View.OnClickListener() {
@@ -57,19 +58,23 @@ public class MemberDetails extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if(member.get("name") == null) {
+                if(member.name == null) {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                     return;
                 }
 
-                member.put("name", name.getText().toString());
-                member.put("nickName", nickName.getText().toString());
+                member.name = name.getText().toString();
+                member.nickName = nickName.getText().toString();
                 String dob = year.getText().toString() + "-" + month.getText().toString() + "-" +  date.getText().toString();
-                member.put("dob", dob);
+                member.dob = dob;
 
-                members.set(index, member);
-                firebaseDataService.myRef.child("members").setValue(members);
+                int index = Utility.getMemberIndex(members, member);
+                if(index > -1) {
+                    members.set(index, member);
+                }
+
+                firebaseDataService.getDatabaseReference().child("members").setValue(members);
                 text = "Successfully Updated";
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();

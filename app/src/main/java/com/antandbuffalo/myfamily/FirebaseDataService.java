@@ -9,54 +9,59 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FirebaseDataService implements DataService {
-    DatabaseReference myRef;
-    MainActivity senderRef;
-    ArrayList members;
+    List<Member> members;
+    DataService sender;
     private static FirebaseDataService firebaseDataService;
+    public static FirebaseDatabase firebaseDatabase;
+    public static DatabaseReference databaseReference;
 
     public static FirebaseDataService getInstance() {
         if(firebaseDataService == null) {
             firebaseDataService = new FirebaseDataService();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = firebaseDatabase.getReference();
         }
+
         return firebaseDataService;
     }
-
     private FirebaseDataService() {
 
     }
 
-    public void setListener(MainActivity sender) {
-        senderRef = sender;
-        if(myRef == null) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            myRef = database.getReference();
-        }
+    public DatabaseReference getDatabaseReference() {
+        return databaseReference;
+    }
+
+    @Override
+    public void onDataChange(List members) {
+
+    }
+
+    public void setListener(Object delegate) {
+        sender = (DataService)delegate;
         listenForDataChange();
     }
 
-    public ArrayList getMembers() {
+    public List getMembers() {
         return members;
     }
 
-    public HashMap<String, String> getMember(Integer index) {
-        Log.d("all", members + "");
-        //Log.d("in", members.get(index) + "");
-        return (HashMap<String, String>)members.get(index);
-    }
-
     public void listenForDataChange() {
-        myRef.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                members = (ArrayList) dataSnapshot.child("members").getValue();
-                senderRef.onDataChange(members);
+                List fbMembers = (ArrayList) dataSnapshot.child("members").getValue();
+
+
+                members = Utility.convertedToMember(fbMembers);
+
+                sender.onDataChange(members);
+                //senderRef.onDataChange(members);
                 //callback.run(members);
             }
 

@@ -24,6 +24,10 @@
         <activity
             android:name=".MemberDetails"
             android:label="@string/title_activity_member_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Members"
+            android:label="@string/title_activity_members"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

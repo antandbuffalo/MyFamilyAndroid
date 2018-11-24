@@ -1,6 +1,7 @@
 package com.antandbuffalo.myfamily;
 
-import com.google.firebase.database.FirebaseDatabase;
+import java.util.List;
 
 public interface DataService {
+    public void onDataChange(List members);
 }
