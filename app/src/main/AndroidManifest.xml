@@ -28,6 +28,10 @@
         <activity
             android:name=".Members"
             android:label="@string/title_activity_members"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FamilyTree"
+            android:label="@string/title_activity_family_tree"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

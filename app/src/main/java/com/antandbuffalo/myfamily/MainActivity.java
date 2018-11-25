@@ -26,8 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataService {
     MainViewModel mainViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FirebaseDatabase.getInstance();
+        setupFirebase();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -49,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        //loadListView();
-        //setupFirebase();
-        populateList();
     }
 
     public void populateList() {
@@ -71,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
                     case 0: {
                         Intent intent = new Intent(getApplicationContext(), Members.class);
                         startActivity(intent);
+                        break;
+                    }
+                    case 1: {
+                        Intent intent = new Intent(getApplicationContext(), FamilyTree.class);
+                        intent.putExtra("parentId", 0);
+                        startActivity(intent);
+                        break;
                     }
                 }
             }
@@ -102,37 +107,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadListView(ArrayList members) {
-        final ListView listview = (ListView) findViewById(R.id.listview);
-
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < members.size(); ++i) {
-            HashMap<String, String> member = (HashMap)members.get(i);
-            Log.d("name " + i, member.get("name") + "");
-            list.add(member.get("name"));
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("index", "i - " + i);
-                //MemberDetails memberDetails = new Inte
-                Intent intent = new Intent(getApplicationContext(), MemberDetails.class);
-                intent.putExtra("index", i);
-                startActivity(intent);
-            }
-        });
-    }
-
-    public void onDataChange(ArrayList members) {
-        loadListView(members);
-    }
-
     public void setupFirebase() {
         FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
         firebaseDataService.setListener(this);
+    }
+
+    @Override
+    public void onDataChange(List members) {
+        populateList();
     }
 }

@@ -9,6 +9,7 @@ public class MainViewModel extends ViewModel {
     public ArrayList getMenu() {
         ArrayList<String> arrayList = new ArrayList<String>();
         arrayList.add("View All Members");
+        arrayList.add("View Family Tree");
         return arrayList;
     }
 }
