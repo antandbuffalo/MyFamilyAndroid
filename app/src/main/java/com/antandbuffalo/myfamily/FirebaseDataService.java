@@ -45,6 +45,10 @@ public class FirebaseDataService implements DataService {
         listenForDataChange();
     }
 
+    public void setMembers(List<Member> newMembers) {
+        this.members = newMembers;
+    }
+
     public List getMembers() {
         return members;
     }

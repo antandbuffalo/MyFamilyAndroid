@@ -12,12 +12,6 @@ public class Member implements Serializable {
 
     Member(HashMap<String, Object> currentMember) {
         this.dob = (String)currentMember.get("dob");
-        Log.d("a", currentMember.get("mid").getClass() + "");
-        Log.d("a", currentMember.get("familyId").getClass() + "");
-        Log.d("a", currentMember.get("parentId").getClass() + "");
-        Log.d("a", currentMember.get("isJoinedOurFamily").getClass() + "");
-        Log.d("a", currentMember.get("living").getClass() + "");
-
         this.familyId = (Long) currentMember.get("familyId");
         this.isJoinedOurFamily = (Boolean) currentMember.get("isJoinedOurFamily");
         this.living = (Boolean)currentMember.get("living");

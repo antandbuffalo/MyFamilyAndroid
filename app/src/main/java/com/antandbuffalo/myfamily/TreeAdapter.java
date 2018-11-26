@@ -1,6 +1,7 @@
 package com.antandbuffalo.myfamily;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,24 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TreeAdapter extends BaseAdapter {
     public List<TreeMember> data;
+
+
+    public List<Member> getMembersFromTree(TreeMember treeMember) {
+        List<Member> members = new ArrayList<Member>();
+        if(treeMember.member1 != null) {
+            members.add(treeMember.member1);
+        }
+        if(treeMember.member2 != null) {
+            members.add(treeMember.member2);
+        }
+        return members;
+    }
 
     @Override
     public int getCount() {

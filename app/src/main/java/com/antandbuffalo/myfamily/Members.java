@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Members extends AppCompatActivity implements DataService {
+public class Members extends AppCompatActivity {
     ProgressBar progressBar;
 
     List<Member> listViewData = new ArrayList<Member>();
@@ -34,18 +34,13 @@ public class Members extends AppCompatActivity implements DataService {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setupFirebase();
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-////        fab.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View view) {
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-////            }
-////        });
+        Intent intent = getIntent();
+        members = (List<Member>) intent.getSerializableExtra("members");
 
         progressBar = findViewById(R.id.toolbar_progress_spinner);
+
+        loadListView(members);
+        progressBar.setVisibility(View.INVISIBLE);
 
         EditText search = findViewById(R.id.search);
         search.addTextChangedListener(new TextWatcher() {
@@ -66,19 +61,6 @@ public class Members extends AppCompatActivity implements DataService {
                 listview.setAdapter(defaultAdapter);
             }
         });
-    }
-
-    @Override
-    public void onDataChange(List allMembers) {
-        Log.d("interface", members + "");
-        members = allMembers;
-        loadListView(allMembers);
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    public void setupFirebase() {
-        FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
-        firebaseDataService.setListener(this);
     }
 
     public void loadListView(List<Member> members) {
