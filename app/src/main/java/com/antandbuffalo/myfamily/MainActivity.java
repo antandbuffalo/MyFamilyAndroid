@@ -29,8 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DataService {
+public class MainActivity extends AppCompatActivity implements DataServiceListener {
     MainViewModel mainViewModel;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements DataService {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        progressBar = findViewById(R.id.main_progress_spinner);
 
         setupFirebase();
 
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements DataService {
                 switch (i) {
                     case 0: {
                         Intent intent = new Intent(getApplicationContext(), Members.class);
-                        intent.putExtra("members", (Serializable) FirebaseDataService.getInstance().getMembers());
+                        intent.putExtra("members", (Serializable) DataService.getInstance().getMembers());
                         startActivity(intent);
                         break;
                     }
@@ -110,12 +113,17 @@ public class MainActivity extends AppCompatActivity implements DataService {
     }
 
     public void setupFirebase() {
-        FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
-        firebaseDataService.setListener(this);
+        DataService dataService = DataService.getInstance();
+        dataService.init();
+        dataService.addListener("main", this);
+
+//        FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
+//        firebaseDataService.setListener(this);
     }
 
     @Override
     public void onDataChange(List members) {
+        progressBar.setVisibility(View.INVISIBLE);
         populateList();
     }
 }

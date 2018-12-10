@@ -9,24 +9,38 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class FirebaseDataService implements DataService {
+public class FirebaseDataService implements DataService, DataServiceListener {
     List<Member> members;
-    DataService sender;
+    HashMap<String, Member> membersMap;
+    DataServiceListener sender;
+    HashMap<String, DataServiceListener> listeners = new HashMap<String, DataServiceListener>();
     private static FirebaseDataService firebaseDataService;
-    public static FirebaseDatabase firebaseDatabase;
-    public static DatabaseReference databaseReference;
+    public FirebaseDatabase firebaseDatabase;
+    public DatabaseReference databaseReference;
+
+    @Override
+    public void init() {
+        if(firebaseDatabase == null) {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = firebaseDatabase.getReference();
+            listenForDataChange();
+        }
+    }
 
     public static FirebaseDataService getInstance() {
         if(firebaseDataService == null) {
             firebaseDataService = new FirebaseDataService();
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference();
+//            firebaseDatabase = FirebaseDatabase.getInstance();
+//            databaseReference = firebaseDatabase.getReference();
         }
 
         return firebaseDataService;
     }
+
     private FirebaseDataService() {
 
     }
@@ -41,16 +55,38 @@ public class FirebaseDataService implements DataService {
     }
 
     public void setListener(Object delegate) {
-        sender = (DataService)delegate;
+        sender = (DataServiceListener) delegate;
         listenForDataChange();
     }
+    public void addListener(String key, DataServiceListener listener) {
+        listeners.put(key, listener);
+    }
+
+    public void notifyListeners() {
+        for (Map.Entry<String, DataServiceListener> entry : listeners.entrySet()) {
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            if(entry.getValue() != null) {
+                entry.getValue().onDataChange(members);
+            }
+        }
+    };
 
     public void setMembers(List<Member> newMembers) {
         this.members = newMembers;
     }
 
-    public List getMembers() {
+    public List<Member> getMembers() {
         return members;
+    }
+
+    @Override
+    public HashMap<String, Member> getMembersMap() {
+        return membersMap;
+    }
+
+    @Override
+    public void update(List<Member> members) {
+        databaseReference.child("members").setValue(members);
     }
 
     public void listenForDataChange() {
@@ -59,12 +95,13 @@ public class FirebaseDataService implements DataService {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                List fbMembers = (ArrayList) dataSnapshot.child("members").getValue();
 
+                HashMap<String, Object> fbMembers = (HashMap) dataSnapshot.child("membersMap").getValue();
 
-                members = Utility.convertedToMember(fbMembers);
+                members = Utility.convertedToMembersList(fbMembers);
+                notifyListeners();
 
-                sender.onDataChange(members);
+                //sender.onDataChange(members);
                 //senderRef.onDataChange(members);
                 //callback.run(members);
             }
@@ -76,5 +113,4 @@ public class FirebaseDataService implements DataService {
             }
         });
     }
-
 }

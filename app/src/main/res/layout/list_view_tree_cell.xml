@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/treeMemberName"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="19dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -45,9 +45,26 @@
             android:background="@drawable/ic_edit_colored"
             android:clickable="false"
             android:focusable="false"
+            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintStart_toEndOf="@+id/treeMemberName"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/editButton"-->
+            <!--style="@style/Widget.Design.FloatingActionButton"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--app:srcCompat="@android:drawable/ic_dialog_email"-->
+            <!--android:background="@drawable/ic_edit_colored"-->
+            <!--android:src="@drawable/ic_edit"-->
+            <!--app:backgroundTint="@color/common_google_signin_btn_text_dark_default"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/imageView"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/treeMemberName"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

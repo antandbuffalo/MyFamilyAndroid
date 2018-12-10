@@ -31,8 +31,8 @@ public class MemberDetails extends AppCompatActivity {
         //String index = intent.getStringExtra("index");
         Log.d("index - ", member + "");
 
-        FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
-        members = firebaseDataService.getMembers();
+        DataService dataService = DataService.getInstance();
+        members = dataService.getMembers();
 
         //HashMap<String, String> member = firebaseDataService.getMember(index);
         //HashMap<String, String> member = (HashMap<String, String>) members.get(index);
@@ -74,7 +74,8 @@ public class MemberDetails extends AppCompatActivity {
                     members.set(index, member);
                 }
 
-                firebaseDataService.getDatabaseReference().child("members").setValue(members);
+                //dataService.getDatabaseReference().child("members").setValue(members);
+                dataService.update(members);
                 text = "Successfully Updated";
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();

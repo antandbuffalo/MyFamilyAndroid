@@ -26,7 +26,7 @@ public class FamilyTree extends AppCompatActivity {
 
         Intent intent = getIntent();
         Long parentId = intent.getLongExtra("parentId", 0L);
-        List<Member> sameParentMembers = Utility.getMembersHavingParentId(FirebaseDataService.getInstance().getMembers(), parentId);
+        List<Member> sameParentMembers = Utility.getMembersHavingParentId(DataService.getInstance().getMembers(), parentId);
         List<TreeMember> finalData = Utility.mergedSameFamilyMembers(sameParentMembers);
         Log.d("final", finalData + "");
 

@@ -20,6 +20,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/main_progress_spinner"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="5dp"
+        android:elevation="5dp"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in" />
+
     <include layout="@layout/content_main" />
 
     <!--<android.support.design.widget.FloatingActionButton-->

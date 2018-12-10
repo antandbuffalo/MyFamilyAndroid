@@ -8,6 +8,15 @@ import java.util.List;
 
 public class Utility {
 
+    public static HashMap<String, Member> convertedToMembersMap(HashMap<String, Object> members) {
+        HashMap<String, Member> membersMap = new HashMap<String, Member>();
+        for (HashMap.Entry<String, Object> entry : members.entrySet()) {
+            Member member = new Member(entry.getKey(), (HashMap<String, Object>)entry.getValue());
+            membersMap.put(member.uniqueId, member);
+        }
+        return membersMap;
+    }
+
     public static List<Member> filteredList(List<Member> members, String search) {
 
         List<Member> filtered = new ArrayList<Member>();
@@ -31,14 +40,13 @@ public class Utility {
         return -1;
     }
 
-    public static List<Member> convertedToMember(List members) {
+    public static List<Member> convertedToMembersList(HashMap<String, Object> membersMap) {
         List<Member> converted = new ArrayList<Member>();
-
-        for(int i=0; i < members.size(); i++) {
-            Log.d("Type", members.get(i).getClass() + "");
-            converted.add(new Member((HashMap<String, Object>)members.get(i)));
+        for (HashMap.Entry<String, Object> entry : membersMap.entrySet()) {
+            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            Member member = new Member(entry.getKey(), (HashMap<String, Object>)entry.getValue());
+            converted.add(member);
         }
-
         return converted;
     }
 

@@ -5,12 +5,13 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class Member implements Serializable {
-    String dob, name, nickName;
+public class Member extends Object implements Serializable {
+    String dob, name, nickName, uniqueId;
     Long familyId, mid, parentId;
     Boolean isJoinedOurFamily, living;
 
-    Member(HashMap<String, Object> currentMember) {
+    Member(String uniqueId, HashMap<String, Object> currentMember) {
+        this.uniqueId = uniqueId;
         this.dob = (String)currentMember.get("dob");
         this.familyId = (Long) currentMember.get("familyId");
         this.isJoinedOurFamily = (Boolean) currentMember.get("isJoinedOurFamily");

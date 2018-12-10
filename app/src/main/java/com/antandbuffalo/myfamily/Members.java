@@ -89,4 +89,17 @@ public class Members extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("1111111", "onRestart");
+        defaultAdapter.members = DataService.getInstance().getMembers();
+        defaultAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("2222222", "resume");
+    }
 }
