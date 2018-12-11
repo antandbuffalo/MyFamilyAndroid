@@ -8,6 +8,21 @@ import java.util.List;
 
 public class Utility {
 
+    public static HashMap<String, Object> genericMemberFromMember(Member member) {
+        HashMap<String, Object> genericMember = new HashMap<String, Object>();
+        genericMember.put("uniqueId", member.uniqueId);
+        genericMember.put("dob", member.dob);
+        genericMember.put("familyId", member.familyId);
+        genericMember.put("isJoinedOurFamily", member.isJoinedOurFamily);
+        genericMember.put("living", member.living);
+        genericMember.put("mid", member.mid);
+        genericMember.put("name", member.name);
+        genericMember.put("nickName", member.nickName);
+        genericMember.put("parentId", member.parentId);
+
+        return genericMember;
+    }
+
     public static HashMap<String, Member> convertedToMembersMap(HashMap<String, Object> members) {
         HashMap<String, Member> membersMap = new HashMap<String, Member>();
         for (HashMap.Entry<String, Object> entry : members.entrySet()) {

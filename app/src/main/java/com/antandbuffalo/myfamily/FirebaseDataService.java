@@ -1,5 +1,7 @@
 package com.antandbuffalo.myfamily;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,8 @@ public class FirebaseDataService implements DataService, DataServiceListener {
     HashMap<String, Member> membersMap;
     DataServiceListener sender;
     HashMap<String, DataServiceListener> listeners = new HashMap<String, DataServiceListener>();
+    HashMap<String, DataServiceListener> updateListeners = new HashMap<String, DataServiceListener>();
+
     private static FirebaseDataService firebaseDataService;
     public FirebaseDatabase firebaseDatabase;
     public DatabaseReference databaseReference;
@@ -54,19 +58,30 @@ public class FirebaseDataService implements DataService, DataServiceListener {
 
     }
 
-    public void setListener(Object delegate) {
-        sender = (DataServiceListener) delegate;
-        listenForDataChange();
-    }
+    @Override
     public void addListener(String key, DataServiceListener listener) {
         listeners.put(key, listener);
     }
+
+    @Override
+    public void addUpdateListener(String key, DataServiceListener listener) {
+        updateListeners.put(key, listener);
+    }
+
 
     public void notifyListeners() {
         for (Map.Entry<String, DataServiceListener> entry : listeners.entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             if(entry.getValue() != null) {
                 entry.getValue().onDataChange(members);
+            }
+        }
+    };
+
+    public void notifyUpdateListeners(boolean status) {
+        for (Map.Entry<String, DataServiceListener> entry : updateListeners.entrySet()) {
+            if(entry.getValue() != null) {
+                entry.getValue().onUpdated(status);
             }
         }
     };
@@ -85,8 +100,22 @@ public class FirebaseDataService implements DataService, DataServiceListener {
     }
 
     @Override
-    public void update(List<Member> members) {
-        databaseReference.child("members").setValue(members);
+    public void update(Member member) {
+        //databaseReference.child("membersMap").child(member.uniqueId).setValue(member);
+        HashMap<String, Object> genericMember = Utility.genericMemberFromMember(member);
+        databaseReference.child("membersMap").child(member.uniqueId).updateChildren(genericMember, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.i("success", "onComplete: success");
+                    notifyUpdateListeners(true);
+                } else {
+                    Log.w("error", "onComplete: fail", databaseError.toException());
+                    notifyUpdateListeners(false);
+                }
+            }
+        });
+        //databaseReference.child("members").setValue(members);
     }
 
     public void listenForDataChange() {
@@ -98,6 +127,7 @@ public class FirebaseDataService implements DataService, DataServiceListener {
 
                 HashMap<String, Object> fbMembers = (HashMap) dataSnapshot.child("membersMap").getValue();
 
+                membersMap = Utility.convertedToMembersMap(fbMembers);
                 members = Utility.convertedToMembersList(fbMembers);
                 notifyListeners();
 

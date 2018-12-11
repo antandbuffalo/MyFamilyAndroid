@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class MockDataService implements DataService, DataServiceListener {
     HashMap<String, DataServiceListener> listeners = new HashMap<String, DataServiceListener>();
+    HashMap<String, DataServiceListener> updateListeners = new HashMap<String, DataServiceListener>();
+
     List<Member> members = new ArrayList<Member>();
     HashMap<String, Object> mockMembers = new HashMap<String, Object>();
     HashMap<String, Member> membersMap = new HashMap<String, Member>();
@@ -56,6 +58,12 @@ public class MockDataService implements DataService, DataServiceListener {
     }
 
     @Override
+    public void addUpdateListener(String key, DataServiceListener listener) {
+        updateListeners.put(key, listener);
+    }
+
+
+    @Override
     public List<Member> getMembers() {
         return members;
     }
@@ -67,8 +75,9 @@ public class MockDataService implements DataService, DataServiceListener {
     }
 
     @Override
-    public void update(List<Member> members) {
-        this.members = members;
+    public void update(Member member) {
+        this.membersMap.put(member.uniqueId, member);
+        //this.members = members;
     }
 
     @Override

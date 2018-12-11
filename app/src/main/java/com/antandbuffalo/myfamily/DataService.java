@@ -13,5 +13,7 @@ public interface DataService {
     public void addListener(String key, DataServiceListener listener);
     public List<Member> getMembers();
     public HashMap<String, Member> getMembersMap();
-    public void update(List<Member> members);
+
+    public void addUpdateListener(String key, DataServiceListener listener);
+    public void update(Member member);
 }

@@ -11,14 +11,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MemberDetails extends AppCompatActivity {
+public class MemberDetails extends AppCompatActivity implements DataServiceListener {
     List<Member> members;
+    MemberDetails self = this;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,9 @@ public class MemberDetails extends AppCompatActivity {
 
         //HashMap<String, String> member = firebaseDataService.getMember(index);
         //HashMap<String, String> member = (HashMap<String, String>) members.get(index);
+
+        progressBar = findViewById(R.id.progress_member_update);
+        progressBar.setVisibility(View.INVISIBLE);
 
         EditText name = (EditText)findViewById(R.id.name);
         EditText date = (EditText)findViewById(R.id.date);
@@ -69,18 +75,18 @@ public class MemberDetails extends AppCompatActivity {
                 String dob = year.getText().toString() + "-" + month.getText().toString() + "-" +  date.getText().toString();
                 member.dob = dob;
 
-                int index = Utility.getMemberIndex(members, member);
-                if(index > -1) {
-                    members.set(index, member);
-                }
+                HashMap<String, Member> memberHashMap = DataService.getInstance().getMembersMap();
+                memberHashMap.put(member.uniqueId, member);
 
-                //dataService.getDatabaseReference().child("members").setValue(members);
-                dataService.update(members);
+                dataService.addUpdateListener("memberDetail", self);
+
+                progressBar.setVisibility(View.VISIBLE);
+                dataService.update(member);
                 text = "Successfully Updated";
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
 
-                finish();
+                //finish();
             }
         });
 
@@ -122,5 +128,17 @@ public class MemberDetails extends AppCompatActivity {
             }
         }
         return "";
+    }
+
+    @Override
+    public void onDataChange(List members) {
+
+    }
+
+    @Override
+    public void onUpdated(boolean status) {
+        Log.i("status", status + "");
+        progressBar.setVisibility(View.INVISIBLE);
+        finish();
     }
 }
