@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LocalStorage.init(getApplicationContext());
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
@@ -46,8 +47,10 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
 
         setupFirebase();
 
-        Intent intent = new Intent(getApplicationContext(), Login.class);
-        startActivity(intent);
+        if(!isAuthenticated()) {
+            Intent intent = new Intent(getApplicationContext(), Login.class);
+            startActivity(intent);
+        }
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
 //                        .setAction("Action", null).show();
 //            }
 //        });
+    }
+
+    public boolean isAuthenticated() {
+        String username = LocalStorage.getItem("username");
+        String password = LocalStorage.getItem("password");
+        return  Utility.validate(username, password);
     }
 
     public void populateList() {

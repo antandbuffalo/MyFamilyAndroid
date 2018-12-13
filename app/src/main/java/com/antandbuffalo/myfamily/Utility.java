@@ -1,6 +1,8 @@
 package com.antandbuffalo.myfamily;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,5 +113,19 @@ public class Utility {
             mergedList.add(entry.getValue());
         }
         return mergedList;
+    }
+
+    public static void showToast(Context context, String text, int duration) {
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    public static boolean validate(String username, String password) {
+        if(username.equalsIgnoreCase("jeyabalaji") && password.equalsIgnoreCase("12121988")) {
+            LocalStorage.setItem("username", username);
+            LocalStorage.setItem("password", password);
+            return true;
+        }
+        return false;
     }
 }
