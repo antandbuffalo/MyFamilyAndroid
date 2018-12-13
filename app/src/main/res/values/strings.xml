@@ -4,4 +4,5 @@
     <string name="title_activity_member_details">MemberDetails</string>
     <string name="title_activity_members">Members</string>
     <string name="title_activity_family_tree">FamilyTree</string>
+    <string name="title_activity_login">Login</string>
 </resources>
