@@ -13,7 +13,10 @@ public interface DataService {
     public void addListener(String key, DataServiceListener listener);
     public List<Member> getMembers();
     public HashMap<String, Member> getMembersMap();
+    public void setMembersMap(HashMap<String, Member> newMembersMap);
 
     public void addUpdateListener(String key, DataServiceListener listener);
     public void update(Member member);
+
+    default public void getOfflineData() {}
 }

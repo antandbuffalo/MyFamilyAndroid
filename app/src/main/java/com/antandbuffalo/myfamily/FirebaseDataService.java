@@ -9,7 +9,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,8 +94,15 @@ public class FirebaseDataService implements DataService, DataServiceListener {
     }
 
     public List<Member> getMembers() {
+        members = Utility.convertedToMembersList(membersMap);
         return members;
     }
+
+    @Override
+    public void setMembersMap(HashMap<String, Member> newMembersMap) {
+        membersMap = newMembersMap;
+    }
+
 
     @Override
     public HashMap<String, Member> getMembersMap() {
@@ -128,7 +138,12 @@ public class FirebaseDataService implements DataService, DataServiceListener {
                 HashMap<String, Object> fbMembers = (HashMap) dataSnapshot.child("membersMap").getValue();
 
                 membersMap = Utility.convertedToMembersMap(fbMembers);
-                members = Utility.convertedToMembersList(fbMembers);
+
+                Gson gson = new Gson();
+                String membersMapJson = gson.toJson(membersMap);
+                LocalStorage.setItem("membersMapString", membersMapJson);
+
+                members = Utility.convertedToMembersList(membersMap);
                 notifyListeners();
 
                 //sender.onDataChange(members);
@@ -142,5 +157,17 @@ public class FirebaseDataService implements DataService, DataServiceListener {
                 Log.w("FB2", "Failed to read value.", error.toException());
             }
         });
+    }
+
+    @Override
+    public void getOfflineData() {
+        Gson gson = new Gson();
+        String membersMapJson = LocalStorage.getItem("membersMapString");
+
+        Type type = new TypeToken<HashMap<String, Member>>(){}.getType();
+
+        membersMap = gson.fromJson(membersMapJson, type);
+        members = Utility.convertedToMembersList(membersMap);
+        notifyListeners();
     }
 }

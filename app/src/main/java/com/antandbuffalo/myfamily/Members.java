@@ -2,6 +2,7 @@ package com.antandbuffalo.myfamily;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -63,15 +64,21 @@ public class Members extends AppCompatActivity {
         });
     }
 
-    public void loadListView(List<Member> members) {
-        listview = (ListView) findViewById(R.id.listview);
-
+    public void prepareData() {
+        listViewData.clear();
         for (int i = 0; i < members.size(); ++i) {
             Member member = members.get(i);
             listViewData.add(member);
         }
+        defaultAdapter.members = listViewData;
+    }
 
+    public void loadListView(List<Member> members) {
+        listview = (ListView) findViewById(R.id.listview);
         defaultAdapter = new DefaultAdapter();
+
+        prepareData();
+
         defaultAdapter.members = listViewData;
 
         listview.setAdapter(defaultAdapter);
@@ -83,7 +90,9 @@ public class Members extends AppCompatActivity {
                 //MemberDetails memberDetails = new Inte
                 Intent intent = new Intent(getApplicationContext(), MemberDetails.class);
                 intent.putExtra("index", i);
-                intent.putExtra("member", listViewData.get(i));
+                Member selectedMember = listViewData.get(i);
+                Member updatedMember = DataService.getInstance().getMembersMap().get(selectedMember.uniqueId);
+                intent.putExtra("member", updatedMember);
                 startActivity(intent);
             }
         });
@@ -93,7 +102,8 @@ public class Members extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("1111111", "onRestart");
-        defaultAdapter.members = DataService.getInstance().getMembers();
+        members = DataService.getInstance().getMembers();
+        prepareData();
         defaultAdapter.notifyDataSetChanged();
     }
 

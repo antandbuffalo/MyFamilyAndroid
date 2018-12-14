@@ -1,6 +1,8 @@
 package com.antandbuffalo.myfamily;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,11 +59,11 @@ public class Utility {
         return -1;
     }
 
-    public static List<Member> convertedToMembersList(HashMap<String, Object> membersMap) {
+    public static List<Member> convertedToMembersList(HashMap<String, Member> membersMap) {
         List<Member> converted = new ArrayList<Member>();
-        for (HashMap.Entry<String, Object> entry : membersMap.entrySet()) {
+        for (HashMap.Entry<String, Member> entry : membersMap.entrySet()) {
             //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            Member member = new Member(entry.getKey(), (HashMap<String, Object>)entry.getValue());
+            Member member = new Member(entry.getKey(), entry.getValue());
             converted.add(member);
         }
         return converted;
@@ -127,5 +129,15 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }

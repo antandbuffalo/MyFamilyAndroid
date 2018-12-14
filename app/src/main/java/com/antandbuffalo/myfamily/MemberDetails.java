@@ -58,18 +58,18 @@ public class MemberDetails extends AppCompatActivity implements DataServiceListe
 
         Button save = findViewById(R.id.saveButton);
         save.setOnClickListener(new View.OnClickListener() {
-            CharSequence text = "Please enter name";
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
 
             @Override
             public void onClick(View view) {
                 if(member.name == null) {
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    Utility.showToast(getApplicationContext(), "Please enter name", Toast.LENGTH_SHORT);
                     return;
                 }
 
+                if(!Utility.isConnected(getApplicationContext())) {
+                    Utility.showToast(getApplicationContext(), "Please connect to Internet", Toast.LENGTH_LONG);
+                    return;
+                }
                 member.name = name.getText().toString();
                 member.nickName = nickName.getText().toString();
                 String dob = year.getText().toString() + "-" + month.getText().toString() + "-" +  date.getText().toString();
@@ -77,14 +77,12 @@ public class MemberDetails extends AppCompatActivity implements DataServiceListe
 
                 HashMap<String, Member> memberHashMap = DataService.getInstance().getMembersMap();
                 memberHashMap.put(member.uniqueId, member);
+                DataService.getInstance().setMembersMap(memberHashMap);
 
                 dataService.addUpdateListener("memberDetail", self);
 
                 progressBar.setVisibility(View.VISIBLE);
                 dataService.update(member);
-                text = "Successfully Updated";
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
 
                 //finish();
             }
@@ -139,6 +137,6 @@ public class MemberDetails extends AppCompatActivity implements DataServiceListe
     public void onUpdated(boolean status) {
         Log.i("status", status + "");
         progressBar.setVisibility(View.INVISIBLE);
-        finish();
+        Utility.showToast(getApplicationContext(), "Successfully updated", Toast.LENGTH_SHORT);
     }
 }

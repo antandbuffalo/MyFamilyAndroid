@@ -128,9 +128,9 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
         DataService dataService = DataService.getInstance();
         dataService.init();
         dataService.addListener("main", this);
-
-//        FirebaseDataService firebaseDataService = FirebaseDataService.getInstance();
-//        firebaseDataService.setListener(this);
+        if(!Utility.isConnected(getApplicationContext())) {
+            dataService.getOfflineData();
+        }
     }
 
     @Override

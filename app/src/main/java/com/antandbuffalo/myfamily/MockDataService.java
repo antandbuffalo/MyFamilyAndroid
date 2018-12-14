@@ -51,8 +51,8 @@ public class MockDataService implements DataService, DataServiceListener {
     @Override
     public void addListener(String key, DataServiceListener listener) {
         listeners.put(key, listener);
-        members = Utility.convertedToMembersList(mockMembers);
         membersMap = Utility.convertedToMembersMap(mockMembers);
+        members = Utility.convertedToMembersList(membersMap);
         //members = Utility.listFromMap(membersMap);
         onDataChange(members);
     }
@@ -73,6 +73,12 @@ public class MockDataService implements DataService, DataServiceListener {
 
         return membersMap;
     }
+
+    @Override
+    public void setMembersMap(HashMap<String, Member> newMembersMap) {
+        membersMap = newMembersMap;
+    }
+
 
     @Override
     public void update(Member member) {

@@ -21,4 +21,16 @@ public class Member extends Object implements Serializable {
         this.nickName = (String)currentMember.get("nickName");
         this.parentId = (Long) currentMember.get("parentId");
     }
+
+    Member(String uniqueId, Member currentMember) {
+        this.uniqueId = uniqueId;
+        this.dob = currentMember.dob;
+        this.familyId = currentMember.familyId;
+        this.isJoinedOurFamily = currentMember.isJoinedOurFamily;
+        this.living = currentMember.living;
+        this.mid = currentMember.mid;
+        this.name = currentMember.name;
+        this.nickName = currentMember.nickName;
+        this.parentId = currentMember.parentId;
+    }
 }
