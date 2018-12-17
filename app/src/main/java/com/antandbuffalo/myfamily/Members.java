@@ -21,12 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Members extends AppCompatActivity {
-    ProgressBar progressBar;
 
     List<Member> listViewData = new ArrayList<Member>();
     DefaultAdapter defaultAdapter;
     List<Member> members;
     ListView listview;
+    List<String> memberKeys;
+    EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,12 @@ public class Members extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        members = (List<Member>) intent.getSerializableExtra("members");
-
-        progressBar = findViewById(R.id.toolbar_progress_spinner);
+        memberKeys = (List<String>) intent.getSerializableExtra("memberKeys");
+        members = Utility.getMembersFromKeys(memberKeys, DataService.getInstance().getMembersMap());
 
         loadListView(members);
-        progressBar.setVisibility(View.INVISIBLE);
 
-        EditText search = findViewById(R.id.search);
+        search = findViewById(R.id.search);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -59,7 +58,7 @@ public class Members extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 listViewData = Utility.filteredList(members, editable.toString());
                 defaultAdapter.members = listViewData;
-                listview.setAdapter(defaultAdapter);
+                defaultAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -78,8 +77,6 @@ public class Members extends AppCompatActivity {
         defaultAdapter = new DefaultAdapter();
 
         prepareData();
-
-        defaultAdapter.members = listViewData;
 
         listview.setAdapter(defaultAdapter);
 
@@ -102,8 +99,9 @@ public class Members extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("1111111", "onRestart");
-        members = DataService.getInstance().getMembers();
-        prepareData();
+
+        members = Utility.getMembersFromKeys(memberKeys, DataService.getInstance().getMembersMap());
+        listViewData = Utility.filteredList(members, search.getText().toString());
         defaultAdapter.notifyDataSetChanged();
     }
 

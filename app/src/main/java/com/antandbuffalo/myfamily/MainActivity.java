@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements DataServiceListener {
     MainViewModel mainViewModel;
@@ -84,7 +85,9 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
                 switch (i) {
                     case 0: {
                         Intent intent = new Intent(getApplicationContext(), Members.class);
-                        intent.putExtra("members", (Serializable) DataService.getInstance().getMembers());
+                        Set keysSet =  DataService.getInstance().getMembersMap().keySet();
+                        List<String> keysList = new ArrayList<String>(keysSet);
+                        intent.putExtra("memberKeys", (Serializable) keysList);
                         startActivity(intent);
                         break;
                     }

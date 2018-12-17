@@ -12,6 +12,14 @@ import java.util.List;
 
 public class Utility {
 
+    public static List<Member> getMembersFromKeys(List<String> keys, HashMap<String, Member> memberHashMap) {
+        List<Member> membersList = new ArrayList<Member>();
+        for(String key: keys) {
+            membersList.add(memberHashMap.get(key));
+        }
+        return membersList;
+    }
+
     public static HashMap<String, Object> genericMemberFromMember(Member member) {
         HashMap<String, Object> genericMember = new HashMap<String, Object>();
         genericMember.put("uniqueId", member.uniqueId);
