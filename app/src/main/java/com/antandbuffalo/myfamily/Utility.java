@@ -1,6 +1,7 @@
 package com.antandbuffalo.myfamily;
 
 import android.content.Context;
+import android.media.MediaMetadata;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Utility {
 
@@ -77,12 +80,11 @@ public class Utility {
         return converted;
     }
 
-    public static List<Member> getMembersHavingParentId(List<Member> members, Long parentId) {
+    public static List<Member> getMembersHavingParentId(Map<String, Member> membersTreeMap, Long parentId) {
         List<Member> filtered = new ArrayList<Member>();
-        for (int i=0; i < members.size(); i++) {
-            Member temp = members.get(i);
-            if(temp.parentId == parentId) {
-                filtered.add(temp);
+        for (Map.Entry<String, Member> entry : membersTreeMap.entrySet()) {
+            if(entry.getValue().parentId == parentId) {
+                filtered.add(entry.getValue());
             }
         }
         return filtered;

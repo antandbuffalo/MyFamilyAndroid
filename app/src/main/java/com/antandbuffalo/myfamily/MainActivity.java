@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
                     }
                     case 1: {
                         Intent intent = new Intent(getApplicationContext(), FamilyTree.class);
-                        intent.putExtra("parentId", 0);
+                        intent.putExtra("parentId", 0L);
                         startActivity(intent);
                         break;
                     }
