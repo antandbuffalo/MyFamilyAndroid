@@ -102,6 +102,7 @@ public class Members extends AppCompatActivity {
 
         members = Utility.getMembersFromKeys(memberKeys, DataService.getInstance().getMembersMap());
         listViewData = Utility.filteredList(members, search.getText().toString());
+        defaultAdapter.members = listViewData;
         defaultAdapter.notifyDataSetChanged();
     }
 
