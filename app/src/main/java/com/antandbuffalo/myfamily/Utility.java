@@ -15,6 +15,10 @@ import java.util.TreeMap;
 
 public class Utility {
 
+    public static int getTotalCount(HashMap<String, Member> memberHashMap) {
+        return memberHashMap.size();
+    }
+
     public static List<Member> getMembersFromKeys(List<String> keys, HashMap<String, Member> memberHashMap) {
         List<Member> membersList = new ArrayList<Member>();
         for(String key: keys) {

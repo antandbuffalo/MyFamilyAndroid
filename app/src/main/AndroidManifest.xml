@@ -38,6 +38,10 @@
             android:name=".Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Count"
+            android:label="@string/title_activity_count"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

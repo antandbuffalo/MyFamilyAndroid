@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements DataServiceListen
                         startActivity(intent);
                         break;
                     }
+                    case 2: {
+                        Intent intent = new Intent(getApplicationContext(), Count.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                 }
             }
         });

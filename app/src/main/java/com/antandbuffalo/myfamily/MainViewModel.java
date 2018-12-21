@@ -10,6 +10,7 @@ public class MainViewModel extends ViewModel {
         ArrayList<String> arrayList = new ArrayList<String>();
         arrayList.add("View All Members");
         arrayList.add("View Family Tree");
+        arrayList.add("Count");
         return arrayList;
     }
 }
